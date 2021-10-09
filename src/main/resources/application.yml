@@ -1,2 +1,1 @@
-build-image:
-  image-name: test/test-app
+spring-boot.build-image.imageName: test/test-app
