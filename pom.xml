@@ -45,6 +45,11 @@
                 <configuration>
                     <imageName>gcr.io/${gcloud.project.id}/${project.artifactId}:${project.version}</imageName>
                     <publish>true</publish>
+                    <docker>
+                        <publishRegistry>
+                            <url>https://gcr.io</url>
+                        </publishRegistry>
+                    </docker>
                 </configuration>
             </plugin>
             <plugin>
