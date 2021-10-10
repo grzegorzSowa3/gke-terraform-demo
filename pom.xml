@@ -15,6 +15,7 @@
 	<description>Demo project for deploying on GKE with Terraform</description>
 	<properties>
 		<java.version>11</java.version>
+		<gcloud.project.id><!--TODO: change it--></gcloud.project.id>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,7 +44,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<imageName>gcr.io/${project.artifactId}:${project.version}</imageName>
+					<imageName>gcr.io/${gcloud.project.id}/${project.artifactId}:${project.version}</imageName>
 				</configuration>
 			</plugin>
 		</plugins>
