@@ -18,8 +18,8 @@ spec:
         app: test-app
     spec:
       containers:
-        - name: forum
-          image: gke-terraform-demo:latest
+        - name: test-app
+          image: eu.gcr.io/gke-terraform-demo:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
