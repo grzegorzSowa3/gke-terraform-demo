@@ -9,6 +9,11 @@ resource "google_service_account" "default" {
   display_name = "K8s Service Account"
 }
 
+resource "google_project_iam_member" "registry_reader_binding" {
+  role    = "roles/containerregistry.ServiceAgent"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
 resource "google_container_cluster" "primary" {
   name                     = "my-gke-cluster"
   remove_default_node_pool = true
@@ -26,8 +31,7 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
     service_account = google_service_account.default.email
     oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform",
-      "https://www.googleapis.com/auth/devstorage.read_only"
+      "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
 }
