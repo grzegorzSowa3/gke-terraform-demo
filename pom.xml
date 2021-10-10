@@ -56,8 +56,9 @@
                     <execution>
                         <id>Inject version and project id to deployment.yml</id>
                         <goals>
-                            <goal>package</goal>
+                            <goal>exec</goal>
                         </goals>
+                        <phase>package</phase>
                     </execution>
                 </executions>
                 <configuration>
