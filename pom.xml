@@ -44,7 +44,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>test</name>
+						<name>eu.gcr.io/${artifactId}:1337</name>
 					</image>
 				</configuration>
 			</plugin>
