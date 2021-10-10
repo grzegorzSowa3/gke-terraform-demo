@@ -26,7 +26,8 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
     service_account = google_service_account.default.email
     oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform"
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.read_only"
     ]
   }
 }
