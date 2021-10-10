@@ -45,6 +45,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <imageName>gcr.io/${gcloud.project.id}/${project.artifactId}:${project.version}</imageName>
+                    <publish>true</publish>
                 </configuration>
             </plugin>
             <plugin>
@@ -55,7 +56,7 @@
                     <execution>
                         <id>Inject version and project id to deployment.yml</id>
                         <goals>
-                            <goal>build</goal>
+                            <goal>package</goal>
                         </goals>
                     </execution>
                 </executions>
