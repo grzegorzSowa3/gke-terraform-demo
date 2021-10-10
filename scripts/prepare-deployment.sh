@@ -1,0 +1,1 @@
+sed -e "s+{{IMAGE_VERSION}}+$1+g" -e "s+{{GCLOUD_PROJECT_ID}}+$2+g" deployment.yml >> target/deployment.yml

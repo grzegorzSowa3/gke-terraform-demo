@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: test-app
-          image: gcr.io/gcloud-project-id/gke-terraform-demo:latest # TODO: change it
+          image: gcr.io/{{GCLOUD_PROJECT_ID}}/gke-terraform-demo:{{IMAGE_VERSION}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
