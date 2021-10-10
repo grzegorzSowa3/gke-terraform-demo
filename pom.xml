@@ -63,8 +63,8 @@
                 <configuration>
                     <executable>${basedir}/scripts/prepare-deployment.sh</executable>
                     <arguments>
-                        <argument>${project.artifactId}</argument>
                         <argument>${gcloud.project.id}</argument>
+                        <argument>${project.version}</argument>
                     </arguments>
                 </configuration>
             </plugin>
