@@ -57,9 +57,9 @@ resource "google_sql_user" "postgres_user" {
   password = random_password.postgres_password.result
 }
 
-resource "kubernetes_secret" "postgres-credentials" {
+resource "kubernetes_secret" "postgres_credentials" {
   metadata {
-    name = "postgres-credentials"
+    name = "postgres_credentials"
   }
 
   data = {
