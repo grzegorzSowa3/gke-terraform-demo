@@ -61,6 +61,7 @@ module "gke_auth" {
   source               = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   project_id           = "my-project-id"
   cluster_name         = "my-cluster-name"
+  location             = var.zone
   use_private_endpoint = true
 }
 
