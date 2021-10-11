@@ -11,3 +11,8 @@ variable "zone" {
   type = string
   default = "europe-central2-a"
 }
+
+variable "postgres_user" {
+  type = string
+  default = "user"
+}

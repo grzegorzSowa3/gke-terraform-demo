@@ -45,3 +45,27 @@ resource "google_sql_database_instance" "postgres" {
     tier = "db-f1-micro"
   }
 }
+
+resource "random_password" "postgres_password" {
+  length           = 32
+  special          = true
+}
+
+resource "google_sql_user" "postgres_user" {
+  name     = var.postgres_user
+  instance = google_sql_database_instance.postgres.name
+  password = random_password.postgres_password.result
+}
+
+resource "kubernetes_secret" "postgres-credentials" {
+  metadata {
+    name = "postgres-credentials"
+  }
+
+  data = {
+    username = google_sql_user.postgres_user.name
+    password = google_sql_user.postgres_user.password
+  }
+
+  type = "kubernetes.io/basic-auth"
+}
