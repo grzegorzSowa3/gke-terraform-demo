@@ -10,8 +10,8 @@ resource "google_service_account" "default" {
 }
 
 resource "google_project_iam_member" "registry_reader_binding" {
-  role    = "roles/containerregistry.ServiceAgent"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  role   = "roles/containerregistry.ServiceAgent"
+  member = "serviceAccount:${google_service_account.default.email}"
 }
 
 resource "google_container_cluster" "primary" {
@@ -37,9 +37,9 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 }
 
 resource "google_sql_database_instance" "postgres" {
-  name = "postgres"
-  project = var.project_id
-  region = var.region
+  name             = "postgres"
+  project          = var.project_id
+  region           = var.region
   database_version = "POSTGRES_13"
   settings {
     tier = "db-f1-micro"
@@ -47,8 +47,8 @@ resource "google_sql_database_instance" "postgres" {
 }
 
 resource "random_password" "postgres_password" {
-  length           = 32
-  special          = true
+  length  = 32
+  special = true
 }
 
 resource "google_sql_user" "postgres_user" {
@@ -62,12 +62,12 @@ module "gke_auth" {
   project_id           = var.project_id
   cluster_name         = google_container_cluster.primary.name
   location             = var.zone
-  use_private_endpoint = true
 }
 
 provider "kubernetes" {
   cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
   host                   = module.gke_auth.host
+  port                   = module.gke_auth.port
   token                  = module.gke_auth.token
 }
 
