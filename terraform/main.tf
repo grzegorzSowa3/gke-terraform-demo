@@ -67,7 +67,6 @@ module "gke_auth" {
 provider "kubernetes" {
   cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
   host                   = module.gke_auth.host
-  port                   = module.gke_auth.port
   token                  = module.gke_auth.token
 }
 
