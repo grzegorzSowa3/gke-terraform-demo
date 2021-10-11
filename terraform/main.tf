@@ -44,6 +44,7 @@ resource "google_sql_database_instance" "postgres" {
   settings {
     tier = "db-f1-micro"
   }
+  deletion_protection = false #TODO: true in real application
 }
 
 resource "random_password" "postgres_password" {
