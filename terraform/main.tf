@@ -35,3 +35,10 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
     ]
   }
 }
+
+resource "google_sql_database_instance" "postgres" {
+  name = "postgres"
+  project_id = var.project_id
+  zone = var.zone
+  database_version = "POSTGRES_13"
+}
