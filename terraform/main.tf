@@ -57,6 +57,20 @@ resource "google_sql_user" "postgres_user" {
   password = random_password.postgres_password.result
 }
 
+module "gke_auth" {
+  source               = "terraform-google-modules/kubernetes-engine/google//modules/auth"
+  project_id           = "my-project-id"
+  cluster_name         = "my-cluster-name"
+  location             = module.gke.location
+  use_private_endpoint = true
+}
+
+provider "kubernetes" {
+  cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
+  host                   = module.gke_auth.host
+  token                  = module.gke_auth.token
+}
+
 resource "kubernetes_secret" "postgres_credentials" {
   metadata {
     name = "postgres_credentials"
