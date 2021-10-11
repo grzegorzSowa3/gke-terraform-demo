@@ -41,4 +41,7 @@ resource "google_sql_database_instance" "postgres" {
   project = var.project_id
   region = var.region
   database_version = "POSTGRES_13"
+  settings {
+    tier = "db-f1-micro"
+  }
 }
