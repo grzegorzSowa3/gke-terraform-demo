@@ -1,8 +1,6 @@
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-    hibernate:
-      ddl-auto: update
   datasource:
     platform: postgres
     url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:5432/test_app
