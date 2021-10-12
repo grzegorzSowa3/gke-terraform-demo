@@ -77,6 +77,7 @@ resource "kubernetes_secret" "postgres_credentials" {
   }
 
   data = {
+    host = google_sql_database_instance.postgres.ip_address
     username = google_sql_user.postgres_user.name
     password = google_sql_user.postgres_user.password
   }
