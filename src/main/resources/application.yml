@@ -11,5 +11,5 @@ spring:
 ---
 
 spring:
-  profiles: deployment
+  config.activate.on-profile: deployment
   jpa.hibernate.ddl-auto: update
