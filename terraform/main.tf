@@ -38,6 +38,7 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
 resource "random_string" "postgres_name" {
   length = 6
+  special = false
 }
 
 resource "google_sql_database_instance" "postgres" {
