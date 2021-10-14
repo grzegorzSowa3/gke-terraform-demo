@@ -43,7 +43,7 @@ resource "random_string" "postgres_name" {
 }
 
 resource "google_sql_database_instance" "postgres" {
-  name             = format("postgres%s", random_string.postgres_name.result)
+  name             = format("postgres_%s", random_string.postgres_name.result)
   project          = var.project_id
   region           = var.region
   database_version = "POSTGRES_13"
