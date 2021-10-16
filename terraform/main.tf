@@ -1,8 +1,23 @@
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "3.88.0"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.5.1"
+    }
+  }
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
   zone    = var.zone
 }
+
+data "google_client_config" "default" {}
 
 resource "google_service_account" "default" {
   account_id   = "k8s-service-account-id"
@@ -64,17 +79,10 @@ resource "google_sql_user" "postgres_user" {
   password = random_password.postgres_password.result
 }
 
-module "gke_auth" {
-  source               = "terraform-google-modules/kubernetes-engine/google//modules/auth"
-  project_id           = var.project_id
-  cluster_name         = google_container_cluster.primary.name
-  location             = var.zone
-}
-
 provider "kubernetes" {
-  cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
-  host                   = module.gke_auth.host
-  token                  = module.gke_auth.token
+  host                   = "https://${google_container_cluster.primary.endpoint}"
+  cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
+  token                  = data.google_client_config.default.access_token
 }
 
 resource "kubernetes_secret" "postgres_credentials" {
