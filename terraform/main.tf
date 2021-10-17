@@ -81,17 +81,32 @@ resource "google_container_node_pool" "vpc_native_cluster_preemptible_nodes" {
   }
 }
 
-resource "random_string" "postgres_name" {
-  length = 6
-  special = false
-  upper = false
+resource "google_compute_global_address" "private_ip" {
+  name          = "private-ip-address"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
+}
+
+resource "google_service_networking_connection" "service_vpc_connection" {
+  network                 = google_compute_network.vpc.id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip.name]
+}
+
+resource "random_id" "postgres_suffix" {
+  byte_length = 4
 }
 
 resource "google_sql_database_instance" "postgres" {
-  name             = format("postgres%s", random_string.postgres_name.result)
+  name             = "postgres-${random_id.postgres_suffix.hex}"
   project          = var.project_id
   region           = var.region
   database_version = "POSTGRES_13"
+
+  depends_on = [google_service_networking_connection.service_vpc_connection]
+
   settings {
     tier = "db-f1-micro"
     ip_configuration {
