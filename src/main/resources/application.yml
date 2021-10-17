@@ -3,7 +3,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
   datasource:
     platform: postgres
-    url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:5432/test_app
+    url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:5432/${POSTGRES_DB:test}
     username: ${POSTGRES_USERNAME:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driverClassName: org.postgresql.Driver

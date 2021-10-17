@@ -12,7 +12,7 @@ variable "zone" {
   default = "europe-central2-a"
 }
 
-variable "postgres_user" {
+variable "app_name" {
   type = string
-  default = "user"
+  default = "test-app"
 }

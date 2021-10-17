@@ -117,13 +117,18 @@ resource "google_sql_database_instance" "postgres" {
   deletion_protection = false #TODO: true in real application
 }
 
+resource "google_sql_database" "database" {
+  name     = "${var.app_name}-db"
+  instance = google_sql_database_instance.postgres.name
+}
+
 resource "random_password" "postgres_password" {
   length  = 32
   special = true
 }
 
 resource "google_sql_user" "postgres_user" {
-  name     = var.postgres_user
+  name     = "${var.app_name}-user"
   instance = google_sql_database_instance.postgres.name
   password = random_password.postgres_password.result
 }
@@ -141,6 +146,7 @@ resource "kubernetes_secret" "postgres_credentials" {
 
   data = {
     host = google_sql_database_instance.postgres.first_ip_address
+    db_name = google_sql_database.database.name
     username = google_sql_user.postgres_user.name
     password = google_sql_user.postgres_user.password
   }
