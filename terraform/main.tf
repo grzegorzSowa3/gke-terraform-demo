@@ -37,7 +37,7 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_subnetwork" "vpc_subnet" {
   name          = "test-subnetwork"
   ip_cidr_range = "10.2.0.0/16"
-  region        = "us-central1"
+  region        = var.region
   network       = google_compute_network.vpc.id
 
   secondary_ip_range {
@@ -94,6 +94,10 @@ resource "google_sql_database_instance" "postgres" {
   database_version = "POSTGRES_13"
   settings {
     tier = "db-f1-micro"
+    ip_configuration {
+      ipv4_enabled = false
+      private_network = google_compute_network.vpc.id
+    }
   }
   deletion_protection = false #TODO: true in real application
 }
