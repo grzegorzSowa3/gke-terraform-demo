@@ -29,15 +29,45 @@ resource "google_project_iam_member" "registry_reader_binding" {
   member = "serviceAccount:${google_service_account.default.email}"
 }
 
-resource "google_container_cluster" "primary" {
+resource "google_compute_network" "vpc" {
+  name                    = "test-network"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "vpc_subnet" {
+  name          = "test-subnetwork"
+  ip_cidr_range = "10.2.0.0/16"
+  region        = "us-central1"
+  network       = google_compute_network.vpc.id
+
+  secondary_ip_range {
+    range_name    = "services-range"
+    ip_cidr_range = "192.168.1.0/24"
+  }
+
+  secondary_ip_range {
+    range_name    = "pod-ranges"
+    ip_cidr_range = "192.168.64.0/22"
+  }
+}
+
+resource "google_container_cluster" "vpc_native_cluster" {
   name                     = "my-gke-cluster"
   remove_default_node_pool = true
   initial_node_count       = 1
+
+  network    = google_compute_network.vpc.id
+  subnetwork = google_compute_subnetwork.vpc_subnet.id
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = google_compute_subnetwork.vpc_subnet.secondary_ip_range.0.range_name
+    services_secondary_range_name = google_compute_subnetwork.vpc_subnet.secondary_ip_range.1.range_name
+  }
 }
 
-resource "google_container_node_pool" "primary_preemptible_nodes" {
+resource "google_container_node_pool" "vpc_native_cluster_preemptible_nodes" {
   name       = "my-node-pool"
-  cluster    = google_container_cluster.primary.name
+  cluster    = google_container_cluster.vpc_native_cluster.name
   node_count = 1
 
   node_config {
@@ -80,8 +110,8 @@ resource "google_sql_user" "postgres_user" {
 }
 
 provider "kubernetes" {
-  host                   = "https://${google_container_cluster.primary.endpoint}"
-  cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
+  host                   = "https://${google_container_cluster.vpc_native_cluster.endpoint}"
+  cluster_ca_certificate = base64decode(google_container_cluster.vpc_native_cluster.master_auth[0].cluster_ca_certificate)
   token                  = data.google_client_config.default.access_token
 }
 
